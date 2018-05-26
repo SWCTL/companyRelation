@@ -101,7 +101,7 @@ class TCorpPertains(models.Model):
 class TCorpStock(models.Model):
     org = models.IntegerField(db_column='ORG', primary_key=True)  # Field name made lowercase.
     id = models.IntegerField(db_column='ID')  # Field name made lowercase.
-    sed_id = models.IntegerField(db_column='SEQ_ID')  # Field name made lowercase.
+    seq_id = models.IntegerField(db_column='SEQ_ID')  # Field name made lowercase.
     stock_type = models.CharField(db_column='STOCK_TYPE', max_length=255, blank=True, null=True)  # Field name made lowercase.
     country = models.CharField(db_column='COUNTRY', max_length=255, blank=True, null=True)  # Field name made lowercase.
     certificate_type = models.CharField(db_column='CERTIFICATE_TYPE', max_length=255, blank=True, null=True)  # Field name made lowercase.
