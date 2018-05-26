@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>企业族谱关系</title>
+    <link href="/static/css/index.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<form method="get" action="/search/">
+    {% csrf_token %}
+    <input type="search" name="com_name">
+    <button type="submit">搜索</button>
+</form>
+</body>
+</html>
