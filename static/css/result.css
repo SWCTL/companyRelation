@@ -1,0 +1,16 @@
+.info h3 span{
+    border:1px solid lightgreen; border-radius:3px;  color:lightgreen;
+    font-size:18px; margin-left:1%; padding:2px 5px;
+}
+.info div{
+    margin-top:1%;
+}
+.detail{
+    margin-left:1%;
+}
+table{
+    margin-top:2%;
+}
+.table_title{
+    background:#F5FAFE;
+}
