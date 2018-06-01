@@ -1,11 +1,13 @@
 from django.shortcuts import render
+from django.http import Http404
 from django.shortcuts import HttpResponse
 from dataManage import models
 
 # Create your views here.
 
 def index(request):
-    return render(request, "index.html")
+    corp_names = models.TCorp.objects.values("corp_name")
+    return render(request, "index.html", {'corp_names': corp_names})
 
 
 def result(request):
@@ -17,7 +19,11 @@ def fail(request):
 def search(request):
     com_name = request.GET.get('com_name')
     error_msg = ''
-    company = models.TCorp.objects.get(corp_name=com_name)
+    #company=get_object_or_404(models.TCorp,corp_name=com_name)
+    try:
+        company = models.TCorp.objects.get(corp_name=com_name)
+    except models.TCorp.DoesNotExist:
+        raise Http404
 
     if not com_name:
         error_msg = '请输入关键词'
