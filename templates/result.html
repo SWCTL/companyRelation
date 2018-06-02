@@ -11,10 +11,10 @@
     <div class="info">
         <h3 style="font-weight:bold">{{ company.corp_name }}
             <span>
-                {% if company.corp_status == '1900-01-01' %}在业{% endif %}
-                {% if company.corp_status == '02' %}注销{% endif %}
-                {% if company.corp_status == '03' %}吊销{% endif %}
-                {% if company.corp_status == '04' %}迁出{% endif %}
+                {% if company.corp_status == '1' %}在业{% endif %}
+                {% if company.corp_status == '2' %}注销{% endif %}
+                {% if company.corp_status == '3' %}吊销{% endif %}
+                {% if company.corp_status == '4' %}迁出{% endif %}
             </span>
         </h3>
         <div>电话：<span class="detail">{{ company.tel }}</span></div>
@@ -27,15 +27,15 @@
             <td class="table_title">注册资本：</td>
             <td>{{ company.reg_capi }}</td>
             <td class="table_title">成立日期：</td>
-            <td>{{ company.create_date }}</td>
+            <td>{{ company.create_date|date:"Y-m-d H:i:s"}}</td>
         </tr>
         <tr>
             <td class="table_title">经营状态：</td>
             <td>
-                {% if company.corp_status == '1900-01-01' %}在业{% endif %}
-                {% if company.corp_status == '02' %}注销{% endif %}
-                {% if company.corp_status == '03' %}吊销{% endif %}
-                {% if company.corp_status == '04' %}迁出{% endif %}
+                {% if company.corp_status == '1' %}在业{% endif %}
+                {% if company.corp_status == '2' %}注销{% endif %}
+                {% if company.corp_status == '3' %}吊销{% endif %}
+                {% if company.corp_status == '4' %}迁出{% endif %}
             </td>
             <td class="table_title">统一社会信用代码：</td>
             <td>{{ company.reg_no }}</td>
@@ -56,7 +56,10 @@
             <td class="table_title">人员规模：</td>
             <td>{{ company.prac_person_num }}人</td>
             <td class="table_title">营业期限：</td>
-            <td>{{ company.fare_team_start }} 至 {{ company.fare_team_end }}</td>
+            <td>{{ company.fare_team_start|date:"Y-m-d" }} 至
+                {% if company.fare_team_end == "" %}{{ "无期限" }}{% endif %}
+                {{ company.fare_team_end }}
+            </td>
         </tr>
         <tr>
             <td class="table_title">登记机关：</td>
@@ -68,7 +71,10 @@
             <td class="table_title">英文名：</td>
             <td>{{ company.english_name }}</td>
             <td class="table_title">曾用名：</td>
-            <td>{{ company.former_name }}</td>
+            <td>
+                {% if company.former_name == "" %}{{ "无" }}{% endif %}
+                {{ company.former_name }}
+            </td>
         </tr>
         <tr>
             <td class="table_title">所属地区：</td>
@@ -79,7 +85,7 @@
     </table>
     <table class="table table-bordered" style="margin-top:-20px;">
         <tr>
-            <td class="table_title" style="width:18.8%">企业地址：</td>
+            <td class="table_title" style="width:20.3%">企业地址：</td>
             <td>{{ company.addr }}</td>
         </tr>
         <tr>

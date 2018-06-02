@@ -1,15 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
     <title>企业族谱关系</title>
-    <link href="/static/css/index.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../static/css/index.css" type="text/css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            var availableTags=new Array();
+            {% for corp in corp_names %}
+                c_name="{{ corp.corp_name }}";
+                availableTags.push(c_name);
+            {% endfor %}
+        console.log(availableTags)
+            $( "#tags1" ).autocomplete({
+                source:availableTags
+            });
+
+        });
+    </script>
 </head>
+
 <body>
-<form method="get" action="/search/">
-    {% csrf_token %}
-    <input type="search" name="com_name">
-    <button type="submit">搜索</button>
-</form>
+<div class="ui-widget">
+    <form method="get" action="/search/">
+        {% csrf_token %}
+        <input id="tags1" type="search" name="com_name" />
+        <button type="submit">搜索</button>
+    </form>
+</div>
 </body>
 </html>
