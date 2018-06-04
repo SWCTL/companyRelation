@@ -16,6 +16,7 @@ class TCorp(models.Model):
     reg_no = models.CharField(db_column='REG_NO', max_length=255, blank=True, null=True)  # Field name made lowercase.
     corp_name = models.CharField(db_column='CORP_NAME', max_length=255, blank=True, null=True)  # Field name made lowercase.
     addr = models.CharField(db_column='ADDR', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    belong_org = models.CharField(db_column='BELONG_ORG',max_length=255,blank=True,null=True)
     belong_dist_org = models.CharField(db_column='BELONG_DIST_ORG', max_length=255, blank=True, null=True)  # Field name made lowercase.
     belong_trade = models.CharField(db_column='BELONG_TRADE', max_length=255, blank=True, null=True)  # Field name made lowercase.
     econ_kind = models.CharField(db_column='ECON_KIND', max_length=255, blank=True, null=True)  # Field name made lowercase.
