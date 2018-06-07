@@ -23,14 +23,43 @@ def search(request):
         error_msg = '请输入关键词'
         return render(request, 'fail.html', {'error_msg': error_msg})
 
+    # 得到查找的公司
     company = models.TCorp.objects.get(corp_name=com_name)
 
+    # 得到各个股东
+    ownertuple = ownershipStucture(company)
 
+    ownerlist = ownertuple[0]
+    maxholder = ownertuple[1].stock_name
+    naturalMan = ownertuple[2].stock_name
+    enterprise = ownertuple[3].stock_name
 
-    return render(request, "result.html", {'company': company})
+    return render(request, "result.html", {'company': company, 'ownerlist': ownerlist,
+                                           'maxholder': maxholder, 'naturalMan': naturalMan,
+                                           'enterprise': enterprise})
 
-# def ownershipStucture(company):
-#     id = company.id
-#     org = company.org
-#     seqId = company.seq_id
-#     shareholderList = models.TMCorpCorpDist.objects.get(id=id, org=org, seq_id=seqId)
+# 股权结构
+def ownershipStucture(company):
+    cid = company.id
+    corg = company.org
+    cseqId = company.seq_id
+
+    # 找出关联表中该公司的股东id
+    tempShareholderList = models.TMCorpCorpStock.objects.filter(id=cid, org=corg, seq_id=cseqId)
+
+    # 找出股东表中这些股东的记录
+    shareholderList = []
+    for e in tempShareholderList:
+        shareholderList.append(models.TCorpStock.objects.get(id=e.sub_id, org=e.sub_org, seq_id=e.sub_seq_id))
+
+    maxcapi = 0
+    for e in shareholderList:
+        if e.stock_capi > maxcapi:
+            maxcapi = e.stock_capi
+            maxholder = e
+
+    naturalMan = models.TCorpStock.objects.get(stock_type='自然人')
+    enterprise = models.TCorpStock.objects.get(stock_type='企业')
+
+    # 返回股东列表，最大股东，自然人股东，企业股东的tuple
+    return shareholderList, maxholder, naturalMan, enterprise
