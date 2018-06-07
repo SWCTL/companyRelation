@@ -93,6 +93,24 @@
             <td>{{ company.fare_scope }}</td>
         </tr>
     </table>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {% for item in ownerlist %}
+                <p>{{ item.stock_name }}</p>
+                <p>股权比例：{{ item.stock_percent }}</p>
+                <p>认缴金额：{{ item.stock_capi }} 元</p>
+            {% empty %}
+                <p>股东列表为空</p>
+            {% endfor %}
+
+            <p>最大股东：{{ maxholder }}</p>
+            <p>自然人股东：{{ naturalMan}}</p>
+            <p>企业股东：{{ enterprise }}</p>
+        </div>
+    </div>
+
+    <a href="/index/" >返回</a>
 </div>
 
 </body>
