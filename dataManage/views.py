@@ -29,10 +29,10 @@ def search(request):
     # 得到各个股东
     ownertuple = ownershipStucture(company)
 
-    ownerlist = ownertuple[0]
-    maxholder = ownertuple[1].stock_name
-    naturalMan = ownertuple[2].stock_name
-    enterprise = ownertuple[3].stock_name
+    ownerlist = ownertuple[0]              # 股东列表
+    maxholder = ownertuple[1].stock_name   # 最大股东
+    naturalMan = ownertuple[2].stock_name  # 自然人股东
+    enterprise = ownertuple[3].stock_name  # 企业股东
 
     return render(request, "result.html", {'company': company, 'ownerlist': ownerlist,
                                            'maxholder': maxholder, 'naturalMan': naturalMan,
@@ -52,13 +52,17 @@ def ownershipStucture(company):
     for e in tempShareholderList:
         shareholderList.append(models.TCorpStock.objects.get(id=e.sub_id, org=e.sub_org, seq_id=e.sub_seq_id))
 
+    # 查找最大股东
     maxcapi = 0
     for e in shareholderList:
         if e.stock_capi > maxcapi:
             maxcapi = e.stock_capi
             maxholder = e
 
+    # 查找自然人股东
     naturalMan = models.TCorpStock.objects.get(stock_type='自然人')
+
+    # 查找企业股东
     enterprise = models.TCorpStock.objects.get(stock_type='企业')
 
     # 返回股东列表，最大股东，自然人股东，企业股东的tuple
