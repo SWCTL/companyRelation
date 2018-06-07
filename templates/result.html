@@ -8,6 +8,7 @@
 </head>
 <body>
 <div class="container">
+<!-- 基本信息 -->
     <div class="info">
         <h3 style="font-weight:bold">{{ company.corp_name }}
             <span>
@@ -63,7 +64,7 @@
         </tr>
         <tr>
             <td class="table_title">登记机关：</td>
-            <td>{{ company.belong_dist_org }}</td>
+            <td>{{ company.belong_org }}</td>
             <td class="table_title">核准日期：</td>
             <td>{{ company.check_date }}</td>
         </tr>
@@ -94,24 +95,77 @@
         </tr>
     </table>
 
+<!-- 股权结构 -->
     <div class="panel panel-default">
         <div class="panel-body">
-            {% for item in ownerlist %}
-                <p>{{ item.stock_name }}</p>
-                <p>股权比例：{{ item.stock_percent }}</p>
-                <p>认缴金额：{{ item.stock_capi }} 元</p>
-            {% empty %}
-                <p>股东列表为空</p>
-            {% endfor %}
+            <div class="row">
+                <div class="col-sm-6" id="ownershipStructure" style="height: 270px">
+                </div>
+                <div class="col-sm-6">
+                    <ul class="list-group">
+                        {% for item in ownerlist %}
+                            <li class="list-group-item">
+                                <p>{{ item.stock_name }}</p>
+                                <p>
+                                    <span>股权比例：</span>{{ item.stock_percent }}
+                                    <span style="margin-left:20px;">认缴金额：</span>{{ item.stock_capi }} 元
+                                </p>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">股东列表为空</li>
+                        {% endfor %}
+                    </ul>
 
-            <p>最大股东：{{ maxholder }}</p>
-            <p>自然人股东：{{ naturalMan}}</p>
-            <p>企业股东：{{ enterprise }}</p>
+                    <p><span>最大股东：</span> {{ maxholder }}</p>
+                    <p><span>自然人股东：</span> {{ naturalMan}}</p>
+                    <p><span>企业股东：</span> {{ enterprise }}</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <a href="/index/" >返回</a>
 </div>
 
+<script src="/static/js/echarts.min.js"></script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var OSStructureChart = echarts.init(document.getElementById('ownershipStructure'));
+    var ownerholderlist = ownerholderlist;
+
+    // 指定股权结构图表的配置项和数据
+    OSStructureChart.setOption ({
+        //标题
+        title: {
+            text: '{{ company.corp_name }}',
+            subtext: '股权结构',
+            left: 'center'
+        },
+        tooltip: {},
+        //图例
+        legend: {
+            // orient: 'vertical',
+            // top: 'middle',
+            bottom: 10,
+            left: 'center',
+            data: [
+                {% for e in ownerlist %}
+                    '{{ e.stock_name }}',
+                {% endfor %}
+            ]
+        },
+        //具体配置
+        series: [{
+            name: '股权结构',
+            type: 'pie',
+            radius: '55%',
+            data: [
+                {% for e in ownerlist %}
+                    {name: '{{ e.stock_name }}', value: {{ e.stock_capi }}},
+                {% endfor %}
+            ]
+        }]
+    });
+</script>
 </body>
 </html>
