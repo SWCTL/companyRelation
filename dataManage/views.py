@@ -26,13 +26,13 @@ def search(request):
     # 得到查找的公司
     company = models.TCorp.objects.get(corp_name=com_name)
 
-    # 得到各个股东
-    ownertuple = ownershipStucture(company)
+    # 得到股权结构信息
+    structuredic = ownershipStucture(company)
 
-    ownerlist = ownertuple[0]              # 股东列表
-    maxholder = ownertuple[1].stock_name   # 最大股东
-    naturalMan = ownertuple[2].stock_name  # 自然人股东
-    enterprise = ownertuple[3].stock_name  # 企业股东
+    ownerlist = structuredic['shareholderList']              # 股东列表
+    maxholder = structuredic['maxholder'].stock_name         # 最大股东
+    naturalMan = structuredic['naturalMan'].stock_name       # 自然人股东
+    enterprise = structuredic['enterprise'].stock_name       # 企业股东
 
     return render(request, "result.html", {'company': company, 'ownerlist': ownerlist,
                                            'maxholder': maxholder, 'naturalMan': naturalMan,
@@ -44,26 +44,47 @@ def ownershipStucture(company):
     corg = company.org
     cseqId = company.seq_id
 
+    # 股权结构字典
+    stucture = {
+        'shareholderList': [],  # 股东列表
+        'maxholder': None,      # 最大股东
+        'naturalMan': None,     # 自然人股东
+        'enterprise': None      # 企业股东
+    }
+
     # 找出关联表中该公司的股东id
     tempShareholderList = models.TMCorpCorpStock.objects.filter(id=cid, org=corg, seq_id=cseqId)
 
     # 找出股东表中这些股东的记录
-    shareholderList = []
     for e in tempShareholderList:
-        shareholderList.append(models.TCorpStock.objects.get(id=e.sub_id, org=e.sub_org, seq_id=e.sub_seq_id))
+        stucture['shareholderList'].append(models.TCorpStock.objects.get(id=e.sub_id, org=e.sub_org, seq_id=e.sub_seq_id))
 
     # 查找最大股东
     maxcapi = 0
-    for e in shareholderList:
+    for e in stucture['shareholderList']:
         if e.stock_capi > maxcapi:
             maxcapi = e.stock_capi
-            maxholder = e
+            stucture['maxholder'] = e
 
     # 查找自然人股东
-    naturalMan = models.TCorpStock.objects.get(stock_type='自然人')
+    stucture['naturalMan'] = models.TCorpStock.objects.get(stock_type='自然人')
 
     # 查找企业股东
-    enterprise = models.TCorpStock.objects.get(stock_type='企业')
+    stucture['enterprise'] = models.TCorpStock.objects.get(stock_type='企业')
 
-    # 返回股东列表，最大股东，自然人股东，企业股东的tuple
-    return shareholderList, maxholder, naturalMan, enterprise
+    # 返回股权结构字典
+    return stucture
+
+# 企业图谱
+def enterpriseAtlas(company):
+    atlas = {
+        'shareholser': [],
+        'seniorExecutive': [],
+        'adjudicativeDoc': [],
+        'courtAnnoun': [],
+        'historicalShr': [],
+        'histLegalPer': [],
+        'outboundInvest': [],
+    }
+
+    return atlas
