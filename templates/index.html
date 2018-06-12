@@ -25,8 +25,11 @@
 </head>
 
 <body>
+<div class="logo">
+    <img src="../static/images/logo.png">
+</div>
 <div class="ui-widget">
-    <form method="get" action="/search/">
+    <form method="get" action="/search/" class="form">
         {% csrf_token %}
         <input id="tags1" type="search" name="com_name" />
         <button type="submit">搜索</button>
