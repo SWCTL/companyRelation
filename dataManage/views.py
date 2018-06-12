@@ -34,9 +34,52 @@ def search(request):
     naturalMan = ownertuple[2].stock_name  # 自然人股东
     enterprise = ownertuple[3].stock_name  # 企业股东
 
+    #第二题
+
+    #获取市场主体的联合主键
+    com_org = models.TCorp.objects.get(corp_name=com_name).org
+    com_id = models.TCorp.objects.get(corp_name=com_name).id
+    com_seq_id = models.TCorp.objects.get(corp_name=com_name).seq_id
+
+    # 市场主体对外投资
+
+    #通过市场主题的联合主键，在M4中寻找对外投资公司的记录
+    dist_com_lists = models.TMCorpCorpDist.objects.filter(org=com_org, id=com_id, seq_id=com_seq_id)
+
+    #在公司表中获取分公司的记录
+    dist_coms =[]
+    for com in dist_com_lists:
+        dist_coms.append(models.TCorpDist.objects.get(org=com.sub_org, id=com.sub_id, seq_id=com.sub_seq_id))
+
+    # 股东再投资
+     # 通过市场主题的联合主键，在M4中寻找股东的记录
+    stock_lists = models.TMCorpCorpStock.objects.filter(org=com_org, id=com_id, seq_id=com_seq_id)
+
+    # 在股东表中获取股东记录
+    stocks = []
+    again_invest=[]   #存储每一个股东再投资的所有公司的列表
+    stock_companys=dict()
+    for stock in stock_lists:
+        # 获取股东的记录
+        the_stock=models.TCorpStock.objects.get(org=stock.sub_org, id=stock.sub_id, seq_id=stock.sub_seq_id)
+        stocks.append(the_stock.stock_name)
+        #stock_companys.append(the_stock.stock_name)
+
+        #获取每一个股东再投资的公司的记录
+        stock_coms=models.TMCorpCorpStock.objects.filter(sub_org=the_stock.org, sub_id=the_stock.id, sub_seq_id=the_stock.seq_id)  #一个股东对应的多个公司主键
+        for stock_com in stock_coms:
+            if models.TCorp.objects.get(id=stock_com.id, org=stock_com.org, seq_id=stock_com.seq_id).corp_name not in again_invest:
+                again_invest.append(models.TCorp.objects.get(id=stock_com.id, org=stock_com.org, seq_id=stock_com.seq_id).corp_name)
+
+        stock_companys[the_stock.stock_name]=again_invest
+
+
+
+
     return render(request, "result.html", {'company': company, 'ownerlist': ownerlist,
                                            'maxholder': maxholder, 'naturalMan': naturalMan,
-                                           'enterprise': enterprise})
+                                           'enterprise': enterprise, 'dist_coms': dist_coms,
+                                           'stock_companys': stock_companys})
 
 # 股权结构
 def ownershipStucture(company):
