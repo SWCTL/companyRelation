@@ -77,6 +77,7 @@ def ownershipStucture(company):
 
 # 企业图谱
 def enterpriseAtlas(company):
+    # 企业图谱字典
     atlas = {
         'shareholser': [],
         'seniorExecutive': [],
@@ -86,5 +87,11 @@ def enterpriseAtlas(company):
         'histLegalPer': [],
         'outboundInvest': [],
     }
+
+    # 股东
+    ownership = ownershipStucture(company)
+    atlas['shareholser'] = ownership['shareholderList']
+
+    # 高管
 
     return atlas
