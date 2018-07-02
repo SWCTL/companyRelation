@@ -19,6 +19,7 @@ from dataManage import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index),
     path('index/', views.index),
     path('result/', views.result),
     path('fail/', views.fail),

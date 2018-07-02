@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>result</title>
+    <title>{{ company.corp_name }}</title>
     <link href="/static/css/result.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 </head>
@@ -22,6 +22,11 @@
         <div>官网：<span class="detail">{{ company.web_url }}</span></div>
         <div>邮箱：<span class="detail">{{ company.email }}</span></div>
         <div>地址：<span class="detail">{{ company.addr }}</span></div>
+    </div>
+
+    <div class="title">
+         <div class="decoration"  style="height:30px; width:10px; background:lightcyan; float:left; margin-right:8px;"></div>
+        企业基本信息
     </div>
     <table class="table table-bordered">
         <tr>
@@ -96,6 +101,12 @@
     </table>
 
 <!-- 股权结构 -->
+
+    <div class="title" style="margin-bottom:2%;">
+         <div class="decoration"  style="height:30px; width:10px; background:lightcyan; float:left; margin-right:8px;"></div>
+        企业股权结构
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
@@ -124,9 +135,81 @@
         </div>
     </div>
 
+    <!--企业投资族谱-->
+    <div class="title">
+        <div class="decoration"  style="height:30px; width:10px; background:lightcyan; float:left; margin-right:8px;"></div>
+        市场主体对外投资
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <td class="table_title">公司名称</td>
+            <td class="table_title">法定代表人名称</td>
+        </tr>
+        {% for dist_com in dist_coms %}
+            <tr>
+                <td>{{ dist_com.dist_name }}</td>
+                <td>{{ dist_com.oper_man_name }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <div class="title">
+        <div class="decoration"  style="height:30px; width:10px; background:lightcyan; float:left; margin-right:8px;"></div>
+        股东再投资
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <td class="table_title">股东名称</td>
+            <td class="table_title">投资公司名称</td>
+        </tr>
+        {% for stock,company in stock_companys.items %}
+            <tr>
+                <td>{{ stock }}</td>
+                <td>
+                    {% for com in company %}
+                        {{ com }}
+                        {{ ' ' }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <!-- 企业族谱 -->
+    <div class="title" style="margin-bottom:2%;">
+         <div class="decoration"  style="height:30px; width:10px; background:lightcyan; float:left; margin-right:8px;"></div>
+        企业族谱
+    </div>
     <div class="panel panel-default">
         <div class="panel-body">
-            <div id="enterpriseAtlas" style="height: 500px"></div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div id="enterpriseAtlas" style="height: 500px"></div>
+                </div>
+                <div class="col-sm-4">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span>高管</span>
+                            <ul class="list-group">
+                                {% for sen_exe in seniorExve %}
+                                    <li class="list-group-item">
+                                        {{ sen_exe }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="list-group-item">
+                            <span>股东</span>
+                            <ul class="list-group">
+                                {% for item in ownerlist %}
+                                    <li class="list-group-item">
+                                        {{ item.stock_name }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
