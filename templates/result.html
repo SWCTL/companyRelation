@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>result</title>
+    <title>{{ company.corp_name }}</title>
     <link href="/static/css/result.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 </head>
@@ -174,10 +174,49 @@
         {% endfor %}
     </table>
 
+    <!-- 企业族谱 -->
+    <div class="title" style="margin-bottom:2%;">
+         <div class="decoration"  style="height:30px; width:10px; background:lightcyan; float:left; margin-right:8px;"></div>
+        企业族谱
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div id="enterpriseAtlas" style="height: 500px"></div>
+                </div>
+                <div class="col-sm-4">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span>高管</span>
+                            <ul class="list-group">
+                                {% for sen_exe in seniorExve %}
+                                    <li class="list-group-item">
+                                        {{ sen_exe }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="list-group-item">
+                            <span>股东</span>
+                            <ul class="list-group">
+                                {% for item in ownerlist %}
+                                    <li class="list-group-item">
+                                        {{ item.stock_name }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <a href="/index/" >返回</a>
 </div>
 
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="/static/js/echarts.min.js"></script>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
@@ -218,5 +257,6 @@
         }]
     });
 </script>
+<script src="/static/js/charts.js"></script>
 </body>
 </html>
